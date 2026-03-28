@@ -19,11 +19,24 @@ Built with [Ollama](https://ollama.com) and [Qwen3-Coder](https://ollama.com/lib
 
 ## Review Modes
 
+## Review Modes
+
 | Mode | Focus |
 |---|---|
 | `general` | Bugs, logic errors, and general code quality |
 | `security` | Vulnerabilities, injection risks, hardcoded secrets, unsafe patterns |
 | `style` | Naming conventions, readability, clean code principles |
+| `migration` | Deprecated/removed Java APIs across version upgrades, compatibility issues, modern alternatives |
+| `java` | Null safety, exception handling, resource leaks, misuse of collections |
+| `concurrency` | Race conditions, deadlocks, missing synchronization, unsafe shared state |
+| `performance` | Inefficient algorithms, unnecessary object creation, N+1 queries, memory inefficiencies |
+| `dependency` | Outdated, vulnerable, or conflicting library versions |
+| `test` | Test coverage gaps, weak assertions, missing edge cases, poor mock usage |
+| `documentation` | Missing or outdated Javadoc/docstrings, unclear signatures, undocumented error conditions |
+| `complexity` | Overly long methods, deep nesting, high cyclomatic complexity, refactoring opportunities |
+| `api` | REST API naming, HTTP status codes, error response structure, input validation |
+| `secrets` | Hardcoded passwords, API keys, tokens, connection strings, private keys |
+| `sql` | Injection risks, inefficient queries, missing indexes, unhandled nulls, missing transactions |
 
 ---
 
@@ -119,9 +132,64 @@ python git_review.py --base main --head my-feature-branch
 python git_review.py --base HEAD~3 --head HEAD --mode security
 ```
 
-**Plain text output for piping or pasting into Jira:**
+**Hunt for hardcoded secrets before pushing:**
+```bash
+python git_review.py --mode secrets
+```
+
+**Java version migration review, saved to file:**
+```bash
+python git_review.py --base old-version --head new-version --mode migration -o review.md
+```
+
+**Check for concurrency issues in a threading refactor:**
+```bash
+python git_review.py --base main --head concurrency-refactor --mode concurrency
+```
+
+**Performance review of a hot path change:**
+```bash
+python git_review.py --base HEAD~1 --head HEAD --mode performance
+```
+
+**Review test quality after adding a new feature:**
+```bash
+python git_review.py --mode test
+```
+
+**Check complexity before submitting a PR:**
+```bash
+python git_review.py --mode complexity
+```
+
+**Review Java-specific issues on a new module:**
+```bash
+python git_review.py --base main --head feature/new-module --mode java
+```
+
+**Audit dependency changes after a library upgrade:**
+```bash
+python git_review.py --base HEAD~1 --head HEAD --mode dependency
+```
+
+**Review REST API changes for design consistency:**
+```bash
+python git_review.py --base main --head feature/new-endpoints --mode api
+```
+
+**Check SQL query changes for injection risks and efficiency:**
+```bash
+python git_review.py --base HEAD~1 --head HEAD --mode sql
+```
+
+**Style review with plain text output for pasting into Jira:**
 ```bash
 python git_review.py --mode style --format plain
+```
+
+**Documentation review of a new public API, saved to file:**
+```bash
+python git_review.py --base main --head feature/public-api --mode documentation -o docs-review.md
 ```
 
 ---
