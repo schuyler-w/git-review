@@ -14,6 +14,17 @@ REVIEW_PROMPTS = {
     "general": "You are a senior software engineer. Review this code diff and flag bugs, logic errors, and code quality issues. Be concise and specific.",
     "security": "You are a security engineer. Review this code diff for security vulnerabilities, injection risks, hardcoded secrets, and unsafe patterns. Be concise and specific.",
     "style": "You are a senior software engineer. Review this code diff for style issues, naming conventions, readability, and adherence to clean code principles. Be concise and specific.",
+    "migration": "You are a senior Java engineer. Review this code diff in the context of a JDK 1.8 to JDK 21 migration. Flag deprecated or removed API usage, compatibility issues, and suggest modern JDK 21 alternatives where applicable. Be concise and specific.",
+    "java": "You are a senior Java engineer. Review this code diff for Java-specific issues including null safety, improper exception handling, resource leaks, misuse of collections, and violations of Java best practices. Be concise and specific.",
+    "concurrency": "You are a senior engineer specializing in concurrent systems. Review this code diff for concurrency issues including race conditions, deadlocks, missing synchronization, unsafe shared state, and improper use of threading primitives. Be concise and specific.",
+    "performance": "You are a senior performance engineer. Review this code diff for performance issues including inefficient algorithms, unnecessary object creation, N+1 query patterns, missing caching opportunities, and memory inefficiencies. Be concise and specific.",
+    "dependency": "You are a senior software engineer specializing in dependency management. Review this code diff for dependency issues including outdated library versions, known vulnerable dependencies, version conflicts, and unnecessary or redundant dependencies. Be concise and specific.",
+    "test": "You are a senior software engineer specializing in software quality. Review this code diff for test quality issues including missing edge case coverage, weak or trivial assertions, improper use of mocks, missing error path tests, and tests that don't actually validate behavior. Be concise and specific.",
+    "documentation": "You are a senior software engineer. Review this code diff for documentation issues including missing or outdated Javadoc and docstrings, unclear method signatures, missing parameter and return documentation, and undocumented error conditions. Be concise and specific.",
+    "complexity": "You are a senior software engineer. Review this code diff for complexity issues including overly long methods, deep nesting, high cyclomatic complexity, violation of the single responsibility principle, and opportunities to refactor into cleaner abstractions. Be concise and specific.",
+    "api": "You are a senior API design engineer. Review this code diff for REST API design issues including inconsistent naming conventions, incorrect HTTP status codes, poor error response structure, missing input validation, and versioning concerns. Be concise and specific.",
+    "secrets": "You are a security engineer specializing in secrets management. Review this code diff exclusively for hardcoded secrets including passwords, API keys, tokens, connection strings, private keys, and any other sensitive values that should not be committed to source control. Be concise and specific.",
+    "sql": "You are a senior database engineer. Review this code diff for SQL issues including injection vulnerabilities, inefficient queries, missing indexes, improper use of joins, unhandled null values in queries, and missing transaction boundaries. Be concise and specific.",
 }
 
 def get_diff(base: str, head: str) -> str:
@@ -97,7 +108,12 @@ def format_output(file_summaries: dict, overall: str, mode: str, base: str, head
 @click.option("--base", default="HEAD~1", show_default=True, help="Base commit or branch to diff from.")
 @click.option("--head", default="HEAD", show_default=True, help="Head commit or branch to diff to.")
 @click.option("--mode", default="general", show_default=True,
-              type=click.Choice(["general", "security", "style"]),
+              type=click.Choice([
+                  "general", "security", "style", "migration",
+                  "java", "concurrency", "performance", "dependency",
+                  "test", "documentation", "complexity", "api",
+                  "secrets", "sql"
+              ]),
               help="Review mode.")
 @click.option("--format", "fmt", default="markdown", show_default=True,
               type=click.Choice(["markdown", "plain"]),
